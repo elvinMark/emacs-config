@@ -16,7 +16,7 @@
     ("fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
-    (prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -128,7 +128,7 @@
 (add-hook 'js-mode-hook
 	  (lambda ()
 	    (set (make-local-variable 'compile-command)
-		 (format "nodejs %s" (shell-quote-argument (buffer-name))))))
+		 (format "node %s" (shell-quote-argument (buffer-name))))))
 
 
 ;; Adding the local bin to my path
@@ -136,8 +136,35 @@
 
 ;; Python formatter black
 (add-hook 'python-mode-hook 'blacken-mode)
+(add-hook 'python-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c i") 'blacken-buffer)))
 
+;; Adding C/C++ formater using clang-format
+(setq clang-format-fallback-style "llvm")
+;; Hook when saving
+(add-hook 'c-mode-hook
+	  (lambda ()
+	    (add-hook 'before-save-hook 'clang-format-buffer nil 'local)))
+(add-hook 'c++-mode-hook
+	  (lambda ()
+	    (add-hook 'before-save-hook 'clang-format-buffer nil 'local)))
+
+;; Hook with key binding
+(add-hook 'c-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c i") 'clang-format-buffer)))
+(add-hook 'c++-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c i") 'clang-format-buffer)))
+
+
+;; Experimental as it run slows on low performance machines
 ;; JS code formatter
 (require 'prettier-js)
-(add-hook 'js-mode-hook 'prettier-js-mode)
+(add-hook 'js-mode-hook 'web-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
 
+;; Lorem Ipsum tool to generate rubbish text
+(require 'lorem-ipsum)
+(lorem-ipsum-use-default-bindings)
