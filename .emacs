@@ -2,7 +2,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -10,19 +10,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
    (quote
-    ("fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
+    ("57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
-    (clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; Setting different themes for GUI and terminal emacs
+(if (display-graphic-p) (load-theme 'solarized-dark) (load-theme 'desert))
 
 ;; Setting the directory for generated temporary files
 (setq backup-directory-alist '(("."."~/.saves")))
@@ -140,13 +142,16 @@
 	  (lambda ()
 	    (local-set-key (kbd "C-c i") 'blacken-buffer)))
 
-;; Adding C/C++ formater using clang-format
+;; Adding C/C++ and Java formater using clang-format
 (setq clang-format-fallback-style "llvm")
 ;; Hook when saving
 (add-hook 'c-mode-hook
 	  (lambda ()
 	    (add-hook 'before-save-hook 'clang-format-buffer nil 'local)))
 (add-hook 'c++-mode-hook
+	  (lambda ()
+	    (add-hook 'before-save-hook 'clang-format-buffer nil 'local)))
+(add-hook 'java-mode-hook
 	  (lambda ()
 	    (add-hook 'before-save-hook 'clang-format-buffer nil 'local)))
 
@@ -157,14 +162,46 @@
 (add-hook 'c++-mode-hook
 	  (lambda ()
 	    (local-set-key (kbd "C-c i") 'clang-format-buffer)))
+(add-hook 'java-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c i") 'clang-format-buffer)))
 
 
-;; Experimental as it run slows on low performance machines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Experimental as it runs slow on low performance machines
 ;; JS code formatter
 (require 'prettier-js)
-(add-hook 'js-mode-hook 'web-mode)
+(add-hook 'js-mode-hook 'web-mode-hook)
 (add-hook 'web-mode-hook 'prettier-js-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Lorem Ipsum tool to generate rubbish text
 (require 'lorem-ipsum)
 (lorem-ipsum-use-default-bindings)
+
+;; Configuring indentation for java (from 4 -> 2)
+(add-hook 'java-mode-hook (lambda ()
+			    (setq c-basic-offset 2)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Experimenta as it runs quite slowly
+;; Jedi for autocomplete in python
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; Disable prettier js mode for JSON mode
+(add-hook 'json-mode-hook (lambda () (prettier-js-mode -1)))
+;; keybinding to pretify JSON
+(add-hook 'json-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c i") 'json-pretty-print-buffer)))
+
+;; Google this command
+(google-this-mode 1)
+
+;; start side bar directory tree
+(neotree)
