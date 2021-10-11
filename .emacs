@@ -15,7 +15,7 @@
     ("57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
-    (web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (sublimity all-the-icons centaur-tabs web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -60,6 +60,9 @@
 ;; draggin stuff up and down with alt and the up and down arrows
 (global-set-key (kbd "M-<up>") 'drag-stuff-up)
 (global-set-key (kbd "M-<down>") 'drag-stuff-down)
+
+;; Buffer list
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;; initialize smex
 (require 'smex)
@@ -210,9 +213,6 @@
 ;; Google this command
 (google-this-mode 1)
 
-;; start side bar directory tree
-(neotree)
-
 ;; Adding magit
 (use-package magit
   :ensure t
@@ -229,3 +229,24 @@
 
 ;; Activating powerline mode just in GUI mode
 (if (display-graphic-p) (powerline-default-theme) nil)
+
+;; Configuring tabs using centaur-tabs
+;; run all-icons-install-fonts first to install necessary icons
+(require 'all-the-icons)
+(use-package centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward)
+  :init
+  (setq centaur-tabs-style "wave"
+	centaur-tabs-set-icons t
+	centaur-tabs-set-bar 'under
+	x-underline-at-descent-line t
+	centaur-tabs-enable-key-bindings t))
+
+;; start side bar directory tree
+(neotree)
+(setq neo-theme 'icons)
