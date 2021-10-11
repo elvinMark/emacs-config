@@ -15,7 +15,7 @@
     ("57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
-    (origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -171,8 +171,14 @@
 ;; Experimental as it runs slow on low performance machines
 ;; JS code formatter
 (require 'prettier-js)
-(add-hook 'js-mode-hook 'prettier-js-mode)
-(add-hook 'web-mode-hook 'prettier-js-mode)
+;; (add-hook 'js-mode-hook 'prettier-js-mode)
+;; (add-hook 'web-mode-hook 'prettier-js-mode)
+
+;; Using js-beautify instead of prettier-js to make it a little bit faster
+(require 'web-beautify)
+(add-hook 'js-mode-hook
+	  (lambda ()
+	    (add-hook 'before-save-hook 'web-beautify-js nil 'local)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -216,7 +222,10 @@
 ;; Adding origami fold to different programming languages modes
 (defun loading-origami-to-modes ()
   (origami-mode)
-  (local-set-key (kbd "<tab>") 'origami-toggle-node))
+  (local-set-key (if (display-graphic-p) (kbd "C-<tab>") (kbd "C-c h")) 'origami-toggle-node))
 
 (dolist (hook '(python-mode-hook c-mode-hook c++-mode-hook js-mode-hook java-mode-hook))
   (add-hook hook 'loading-origami-to-modes))
+
+;; Activating powerline mode just in GUI mode
+(if (display-graphic-p) (powerline-default-theme) nil)
