@@ -15,7 +15,7 @@
     ("57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
-    (google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -171,7 +171,7 @@
 ;; Experimental as it runs slow on low performance machines
 ;; JS code formatter
 (require 'prettier-js)
-(add-hook 'js-mode-hook 'web-mode-hook)
+(add-hook 'js-mode-hook 'prettier-js-mode)
 (add-hook 'web-mode-hook 'prettier-js-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -195,6 +195,7 @@
 
 ;; Disable prettier js mode for JSON mode
 (add-hook 'json-mode-hook (lambda () (prettier-js-mode -1)))
+
 ;; keybinding to pretify JSON
 (add-hook 'json-mode-hook
 	  (lambda ()
@@ -205,3 +206,17 @@
 
 ;; start side bar directory tree
 (neotree)
+
+;; Adding magit
+(use-package magit
+  :ensure t
+  :bind ((("C-c g" . magit-file-dispatch))))
+
+
+;; Adding origami fold to different programming languages modes
+(defun loading-origami-to-modes ()
+  (origami-mode)
+  (local-set-key (kbd "<tab>") 'origami-toggle-node))
+
+(dolist (hook '(python-mode-hook c-mode-hook c++-mode-hook js-mode-hook java-mode-hook))
+  (add-hook hook 'loading-origami-to-modes))
