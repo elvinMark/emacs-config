@@ -15,7 +15,7 @@
     ("57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
-    (sublimity all-the-icons centaur-tabs web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (prettify-greek minimap sublimity all-the-icons centaur-tabs web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -250,3 +250,17 @@
 ;; start side bar directory tree
 (neotree)
 (setq neo-theme 'icons)
+
+;; side Minimap (sublime-like)
+(require 'minimap)
+(setq minimap-window-location 'right)
+(global-set-key (kbd "C-c m") 'minimap-mode)
+
+
+;; prettify symbols (greek symbols) for Python/C/C++/JS
+(require 'prettify-greek)
+(dolist (hook '(python-mode-hook c-mode-hook c++-mode-hook js-mode-hook))
+  (add-hook hook
+	    (lambda ()
+	      (setq prettify-symbols-alist prettify-greek-lower)
+	      (prettify-symbols-mode t))))
