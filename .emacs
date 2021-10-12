@@ -12,7 +12,7 @@
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
-    ("57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
+    ("0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
  '(package-selected-packages
    (quote
     (prettify-greek minimap sublimity all-the-icons centaur-tabs web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
@@ -22,6 +22,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; Installed necessary packages if needed
+(dolist (package package-selected-packages)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 ;; Setting different themes for GUI and terminal emacs
 (if (display-graphic-p) (load-theme 'solarized-dark) (load-theme 'desert))
@@ -241,7 +246,7 @@
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward)
   :init
-  (setq centaur-tabs-style "wave"
+  (setq centaur-tabs-style "bar"
 	centaur-tabs-set-icons t
 	centaur-tabs-set-bar 'under
 	x-underline-at-descent-line t
