@@ -10,12 +10,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ ;; '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
    (quote
-    ("0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
+    ("fe1c13d75398b1c8fd7fdd1241a55c286b86c3e4ce513c4292d01383de152cb7" "0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" default)))
+ '(display-battery-mode t)
  '(package-selected-packages
    (quote
-    (prettify-greek minimap sublimity all-the-icons centaur-tabs web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
+    (dracula-theme speed-type prettify-greek minimap all-the-icons centaur-tabs web-beautify 2048-game latex-preview-pane auctex powerline origami look-mode markdown-preview-mode markdown-mode magit use-package jsonnet-mode google-this jedi color-theme-modern color-theme clang-format lorem-ipsum web-mode prettier prettier-js python-black blacken elpy vline flycheck json-mode multiple-cursors symon org-bullets drag-stuff chess nyan-mode goto-last-change dumb-jump smartparens tabbar neotree direx auto-complete comment-dwim-2 solarized-theme yasnippet-snippets yasnippet smex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -57,6 +59,13 @@
 
 ;; highlight the correspondant bracket
 (show-paren-mode 1)
+
+;; Display time and date
+(setq display-time-day-and-date 1)
+(display-time-mode 1)
+
+;; Display battery status
+(display-battery-mode 1)
 
 ;; keyboard shortcut for jump to directory
 (require 'direx)
@@ -233,7 +242,7 @@
   (add-hook hook 'loading-origami-to-modes))
 
 ;; Activating powerline mode just in GUI mode
-(if (display-graphic-p) (powerline-default-theme) nil)
+(if (display-graphic-p) (powerline-default-theme) (powerline-vim-theme))
 
 ;; Configuring tabs using centaur-tabs
 ;; run all-icons-install-fonts first to install necessary icons
@@ -269,3 +278,10 @@
 	    (lambda ()
 	      (setq prettify-symbols-alist prettify-greek-lower)
 	      (prettify-symbols-mode t))))
+
+
+;; Adding multiple cursors
+(require 'multiple-cursors)
+(global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-,") 'mc/mark-all-like-this)
